@@ -110,4 +110,12 @@ class GameController(initboard: Checkerboard? = null) {
         if (moves.isEmpty()) return "lose"
         return bot.selectMove(checkerboard, botColor,moves)
     }
+
+    /** Получить точки перемещений во время хода **/
+    @JsName("getStepPoints")
+    fun getStepPoints(command: String): Array<String> {
+        val positions = if (command.contains("-")) command.split("-")
+        else command.split(":")
+        return positions.toTypedArray()
+    }
 }

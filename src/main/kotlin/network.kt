@@ -23,15 +23,6 @@ class Layer(size: Int=0) {
 class Network(vararg layerSize: Int) {
     val layers = MutableList(layerSize.size, { i -> Layer(layerSize[i]) })
 
-    fun activate(input: List<Double>): List<Double> {
-        var y = input
-        // последовательно активируем все слои
-        for (i in 0 until layers.size) {
-            y = layers[i].activate(y)
-        }
-        return y
-    }
-
     fun multiActivate(x: List<List<Double>>): List<Double> {
         synchronized(this) {
             layers[0].neurons.apply {

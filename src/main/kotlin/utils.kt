@@ -1,14 +1,14 @@
 /** Генерация css для анимации перемещения между [points] **/
 @JsName("generateCSSAnimation")
-fun generateCSSAnimation(points: Array<String>): String {
+fun generateCSSAnimation(points: Array<String>, fieldWidth: Int=41): String {
     val letters = listOf("a", "b", "c", "d", "e", "f", "g", "h")
     val translate = {from: String, to: String ->
         val getCoordinates = { pos: String ->
             letters.indexOf(pos.substring(0, 1)) to pos.substring(1, 2).toInt() - 1 }
         val coordFrom = getCoordinates(from)
         val coordTo = getCoordinates(to)
-        val dx = (-coordFrom.first + coordTo.first)*41
-        val dy = (coordFrom.second - coordTo.second)*41
+        val dx = (-coordFrom.first + coordTo.first)*fieldWidth
+        val dy = (coordFrom.second - coordTo.second)*fieldWidth
         dx to dy
     }
     return (0 until points.size)

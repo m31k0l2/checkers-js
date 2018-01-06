@@ -25,12 +25,12 @@ dependencies {
 compileKotlin2Js {
     kotlinOptions.outputFile = "/home/melkor/Документы/frontend/node_modules/checkers/output.js"
     kotlinOptions.moduleKind = "umd"
-    kotlinOptions.sourceMap = true
+    kotlinOptions.sourceMap = false
 }
 //compileKotlin2Js {
 //    kotlinOptions.outputFile = "/home/melkor/Документы/frontend/public/js/output.js"
 //    kotlinOptions.moduleKind = "plain"
-//    kotlinOptions.sourceMap = true
+//    kotlinOptions.sourceMap = false
 //}
 
 task assembleWeb(type: Sync) {

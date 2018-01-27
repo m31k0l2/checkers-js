@@ -3,7 +3,7 @@
 import kotlin.js.Math.random
 
 class Player(private val nw: Network, private val predicateMoves: Int = 4,
-             val error: Double=3.0, private val debug: Boolean = false) {
+             val error: Double=3.0) {
     /**
      * Выбор ИИ наилучшего хода
      * [checkerboard] - доска на момент хода
@@ -14,15 +14,13 @@ class Player(private val nw: Network, private val predicateMoves: Int = 4,
      * Оценка осуществляется путём проигрывания ходов вперёд в количестве [predicateMoves]
      * В итоге получается список пар {ход - счёт}
      * Выбирается ход с максимальным счётом
-     * Если [debug] == true, то для отладки показывает, как думает ИИ и печатает выбранный им ход
      */
     fun selectMove(checkerboard: Checkerboard, color: Int, steps: List<String>): String {
         val list = steps.map { it to play(checkerboard, color, predicateMoves, it) }.toList() // оценка каждого ходв
-                .onEach { if (debug) println(it) } // показать, как ИИ думает
         val max = list.maxBy { it.second }!!.second
         val l = list.filter { it.second == max }.map { it.first }
-        val step = selectBestStep(checkerboard, color, l, debug)
-        return step.also { if (debug) println(it) } // показать лучший ход
+        val step = selectBestStep(checkerboard, color, l)
+        return step
     }
 
     /**
@@ -81,7 +79,7 @@ class Player(private val nw: Network, private val predicateMoves: Int = 4,
      * Если нейронная сеть играет за чёрных, то выбирается ход наиболее худший для белых (т.е. минимальное значение)
      * Если за белых, то соответственно максимальное значение
      **/
-    private fun selectBestStep(checkerboard: Checkerboard, color: Int, steps: List<String>, debug: Boolean=false): String {
+    private fun selectBestStep(checkerboard: Checkerboard, color: Int, steps: List<String>): String {
         if (steps.isEmpty()) return ""
         if (steps.size == 1) return steps[0]
         val list = steps.map { it to GameController(checkerboard.clone()) }.map { (command, game) ->
@@ -91,14 +89,11 @@ class Player(private val nw: Network, private val predicateMoves: Int = 4,
             val o = nw.multiActivate(InputEncoder().encode(vector))
             command to o[0]
         }.toList().map {
-            it.first to it.second * if(error > 0) 1 + error - random()*(2*error) / 100 else 1.0
-        } // закладываем ошибку +/- 1%
+            it.first to it.second * if (error > 0) (1 + error/100 * (1 - 2*random())) else 1.0
+        }
         val step = (if (color == 0) {
             list.maxBy { it -> it.second }!!
         } else list.minBy { it.second }!!)
-        if (debug) {
-            println(step)
-        }
         return step.first
     }
 }

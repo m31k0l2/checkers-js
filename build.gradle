@@ -22,17 +22,17 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
 }
 
-//compileKotlin2Js {
-//    kotlinOptions.outputFile = "/home/melkor/Документы/react-checkers/node_modules/checkers/checkers.js"
-//    kotlinOptions.moduleKind = "umd"
-//    kotlinOptions.sourceMap = false
-//}
-
 compileKotlin2Js {
-    kotlinOptions.outputFile = "/home/melkor/gitlab/blog/static/checkers/checkers.js"
-    kotlinOptions.moduleKind = "plain"
+    kotlinOptions.outputFile = "/home/melkor/gitlab/blog/src/checkers/libs/checkers/checkers.js"
+    kotlinOptions.moduleKind = "umd"
     kotlinOptions.sourceMap = false
 }
+
+//compileKotlin2Js {
+//    kotlinOptions.outputFile = "/home/melkor/gitlab/blog/static/checkers/checkers.js"
+//    kotlinOptions.moduleKind = "plain"
+//    kotlinOptions.sourceMap = false
+//}
 
 task assembleWeb(type: Sync) {
     configurations.compile.each { File file ->
